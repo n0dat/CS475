@@ -1,0 +1,29 @@
+
+1. A starts, and B goes next then A then B ...
+	A -> B -> A -> B
+
+2. Selects x where 1 <= x <= 9 if the number has not been selected before
+	So no duplicates (if A chooses 1 on round 1 then 1 is no longer available to either A or B)
+
+3. If the number in previous round x < 5 then the next x must be x >= 5
+
+4. If x in previous round is odd ( x % 2 != 0) then the next number must be even (x % 2 == 0)
+	So if A chooses 1 then B must choose an even number (2, 4, 6, 8)
+		- But must follow rule 3.
+
+So ... 
+	If A chooses 1, B must choose from {6, 8}.
+	 -> If B chooses 6, A must choose from {3, 5, 7, 9}
+			This happens because x >= 5 does not have to follow rule 4 but must follow rule 3.
+	 -> If A chooses 3, B must choose from {8}. This is because A chose an odd and only 1 even
+			valure remains that has not been previously chosen.
+		You could write the entire game tree for this problem.
+
+5. The game ends when either A or B canoot select an number x to continue. 
+	Who ever chose the last valid number wins the game.
+
+6. The uitility at each state x is x for the winning player and -x for the losing one
+	( if B cannot select a number to continue after A select 3 then the utility for A is 3 and B is -3 ).
+ 
+
+Time to actually implemene this though.
