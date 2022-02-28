@@ -27,3 +27,10 @@ So ...
  
 
 Time to actually implemene this though.
+
+
+I need to develop a test program to find it first, without going off of the other files.
+
+This will allow me to develop a solution without looking at a solution that makes no
+sense and trying to adapt it. Just look at Assignment 2 for how this worked out.
+
