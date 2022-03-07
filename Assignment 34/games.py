@@ -40,7 +40,7 @@ def minmax_decision(state, game):
         return v
 
     # Body of minmax_decision:
-    return max(game.actions(state), key=lambda a: min_value(game.result(state, a)))
+    return max(max(list(game.actions(state))), key=lambda a: min_value(game.result(state, a)))
 
 
 # ______________________________________________________________________________

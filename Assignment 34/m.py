@@ -1,0 +1,40 @@
+from test import *
+p = agame()
+print('\n--- sigma ---')
+p.actions(p.sigma)
+p.visit(9)
+print('\n--- 9 ---')
+print(p.result(9))
+
+print('++++++')
+p.actions(p.succs[9])
+p.visit(8)
+print('\n--- 8 ---')
+print(p.result(8))
+
+print('++++++')
+p.actions(p.succs[8])
+p.visit(7)
+print('\n--- 7 ---')
+print(p.result(7))
+
+print('++++++')
+p.actions(p.succs[7])
+p.visit(6)
+print('\n--- 6 ---')
+print(p.result(6))
+
+print('++++++')
+p.actions(p.succs[6])
+p.visit(5)
+print('\n--- 5 ---')
+print(p.result(5))
+
+print('++++++')
+p.actions(p.succs[5])
+p.visit(4)
+print('\n--- 4 ---')
+print(p.result(4))
+
+print('++++++')
+p.actions(p.succs[4])
