@@ -119,11 +119,12 @@ class agame(Game):
 	visited = set()
 	counter = 0
 	termCheck = False
+	finalTerm = 0
+	iters = 0
+	# visits node and adds it utility
 	def visit(self, e):
 		self.visited.add(e)
-		return
-	def nvisit(self, e):
-		self.visited.remove(e)
+		self.utils.append(e)
 		return
 	
 	# give result or state after taking a path
@@ -159,30 +160,40 @@ class agame(Game):
 			# even
 			if int(e) % 2 == 0 and int(e) < 5:
 				# because its even so next must be odd and less than 5 so next >= 5
-				print(list((self.so.difference(self.visited))))
-				return list((self.so.difference(self.visited)))
+				a = list((self.so.difference(self.visited)))
+				print(a)
+				return a
 				# checkMin(so, store)
 			elif int(e) % 2 == 0 and int(e) >= 5:
 				# because its even so next must be odd
-				print(list((self.bo.difference(self.visited))))
-				return list((self.bo.difference(self.visited)))
+				a = list((self.bo.difference(self.visited)))
+				print(a)
+				return a
 			# odd
 			elif int(e) % 2 != 0 and int(e) < 5:
 				# becuase its odd so next must be even and less than 5 so next >= 5
-				print(list((self.se.difference(self.visited))))
-				return list((self.se.difference(self.visited)))
+				a = list((self.se.difference(self.visited)))
+				print(a)
+				return a
 			elif int(e) % 2 != 0 and int(e) >= 5:
 				# because its even so next must be even
-				print(list((self.be.difference(self.visited))))
-				return list((self.be.difference(self.visited)))
+				a = list((self.be.difference(self.visited)))
+				print(a)
+				return a
 		
-	# returns available actions given previous moves and rules
+	# returns utility of action
 	def utility(self, state, player):
 		#tmp = int(state)
-		if player == 'MAX':
-			return self.utils.pop()
+		if player == 'MIN':
+			print('min utils len:', len(self.utils))
+			tmp = self.utils.pop()
+			self.utils.append(tmp)
+			return tmp
 		else:
-			return -self.utils.pop()
+			print('max utils len:', len(self.utils))
+			tmp = self.utils.pop()
+			self.utils.append(tmp)
+			return -tmp
 	
 	# check if state is empty, indicating a terminal state
 	def terminal_test(self, state):
@@ -202,40 +213,58 @@ class agame(Game):
 # end agame(Game)
 
 def mmd(state, game):
-	game.succs.clear()
-	game.visited.clear()
+	#game.succs.clear()
+	#game.visited.clear()
 	player = game.to_move(state)
 	# visited = set()
-	#game.visit(state)
-	
+	#game.visit(state)	
+
 	def max_value(state):
+		print('x iter:', game.iters)
+		game.iters += 1
 		if game.termCheck or game.terminal_test(state):
 			return game.utility(state, player)
-		v = -100000
-		for a in game.actions(state):
-			print('result', game.result(a))
-			game.visit(a)
-			v = max(v, min_value(game.result(a)))
-			#v = max(v, a)
-			print('v max: ', v)
-			#break
-		
+		v = -np.inf
+		tmp = copy.copy(game.actions(state))
+		try:
+			for a in tmp:
+				print('max actions size:', len(tmp))
+				print('max succs size:', len(game.succs))
+				print('max succs:', game.succs)
+				d = game.result(a)
+				print('result', d if len(d) > 0 else 'empty')
+				game.visit(a)
+				v = max(v, min_value(game.result(a)))
+				#v = max(v, a)
+				print('v max: ', v)
+				#break
+		except:
+			pass
 		print('visitedmax: ', list(game.visited))
 		return v
-	def min_value(state):
+
+	def min_value(state,):
+		print('n iter:', game.iters)
+		game.iters += 1
+		
 		if game.termCheck or game.terminal_test(state):
 			return game.utility(state, player)
-		v = 100000
-		# tmp = game.actions(state)
-		for a in game.actions(state):
-			print('result', game.result(a))
-			game.visit(a)
-			v = min(v, max_value(game.result(a)))
-			print('v min:', v)
-			#break
-		
+		v = np.inf
+		tmp = copy.copy(game.actions(state))
+		try:
+			for a in tmp:
+				print('min actions size:', len(tmp))
+				print('min succs size:', len(game.succs))
+				print('min succs:', game.succs)
+				d = game.result(a)
+				print('result', d if len(d) > 0 else 'empty')
+				game.visit(a)
+				v = min(v, max_value(game.result(a)))
+				print('v min:', v)
+				#break
+		except:
+			pass
 		print('visitedmin: ', list(game.visited))
 		return v
 	# body of minmax_decision:
-
 	return max(game.actions(state), key = lambda a: min_value(game.result(a)))
